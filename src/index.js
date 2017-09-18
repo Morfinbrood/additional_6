@@ -1,7 +1,7 @@
 module.exports = function zeros(expression) {
   "use strict";
   // используем уже реализованную функцию перемножения огр чисел
-  function multiply(first,second) {
+  function multiply(first, second) {
     "use strict";
     //функция реверса строки
     function reverseStr(str) {
@@ -85,21 +85,50 @@ module.exports = function zeros(expression) {
   }
 
   //функция получения факториала и двойного факториала
-  function fact (x,type){
-    let res=1;
-    for (let i=1;i<=x;i++){
-      if (type=="!!"){
-        if ((x % 2 ==0) &&(i%2==0)) 
-          res=multiply(String(res),String(i));
-        if ((x % 2 ==1) &&(i%2==1)) 
-          res=multiply(String(res),String(i));
-      }
-      else
-        res=multiply(String(res),String(i));   
+  function fact(x, type) {
+    let res = 1;
+    for (let i = 1; i <= x; i++) {
+      if (type == "!!") {
+        if ((x % 2 == 0) && (i % 2 == 0))
+          res = multiply(String(res), String(i));
+        if ((x % 2 == 1) && (i % 2 == 1))
+          res = multiply(String(res), String(i));
+      } else
+        res = multiply(String(res), String(i));
     }
     return res;
   }
 
-  console.log("factorial= ",fact(14,"!!"));
+  console.log("factorial 90!!= ", fact(90, "!!"));
+  console.log("factorial 10!!= ", fact(10, "!!"));
+  //console.log("factorial 11!!= ", fact(11, "!!"));
 
+  // распличиваем на массив из факториалов и дабл факториалов
+  let arrSubExpr = expression.split("*");
+
+  console.log("arrSubExpr= ", arrSubExpr);
+
+  //определяем какой тип факториала и переводим в численный вид
+  function calcSubExpr(subExp) {
+    let lastSymb = subExp[subExp.length - 1];
+    let preLastSymb = subExp[subExp.length - 2];
+    if (lastSymb == "!" && lastSymb == preLastSymb) {
+      console.log("!! IF subExp= ",subExp ," lastSymb= ", lastSymb, " preLastSymb=", preLastSymb, "  fact= ",fact(parseInt(subExp, "!")));
+      return fact(parseInt(subExp), "!!"); // parseInt автоматически преобразует число игнорируя знаки !
+    }
+    if (lastSymb == "!" && lastSymb !== preLastSymb) {
+      console.log("!! IF subExp= ",subExp ," lastSymb= ", lastSymb, " preLastSymb=", preLastSymb, "  fact= ",fact(parseInt(subExp, "!")));
+      return fact(parseInt(subExp), "!");
+    }
+
+  }
+
+  let result = "1";
+  for (let i = 0; i < arrSubExpr.length; i++) {
+    let elementSubExpr = arrSubExpr[i];
+    console.log("result= ")
+    result = multiply(result, calcSubExpr(elementSubExpr));
+  }
+
+  return result;
 }
