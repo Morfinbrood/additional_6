@@ -1,6 +1,8 @@
 module.exports = function zeros(expression) {
   "use strict";
-  // используем уже реализованную функцию перемножения огр чисел
+  // используем уже реализованную функцию перемножения огромных чисел скопипащенную из Product https://github.com/Morfinbrood/additional_4
+
+  //_______________________________________________________
   function multiply(first, second) {
     "use strict";
     //функция реверса строки
@@ -83,8 +85,9 @@ module.exports = function zeros(expression) {
     }
     return sumColumn(arrMulti);
   }
+  //_______________________________________________________
 
-  //функция получения факториала и двойного факториала
+  //функция получения факториала и двойного факториала в циферно-строковом виде
   function fact(x, type) {
     let res = 1;
     for (let i = 1; i <= x; i++) {
@@ -99,37 +102,28 @@ module.exports = function zeros(expression) {
     return res;
   }
 
-  //console.log("factorial 90!!= ", fact(90, "!!"));
-  //console.log("factorial 10!!= ", fact(10, "!!"));
-  //console.log("factorial 11!!= ", fact(11, "!!"));
-
-  // распличиваем на массив из факториалов и дабл факториалов
+  // распличиваем на массив подвыражений из факториалов и дабл факториалов
   let arrSubExpr = expression.split("*");
-
-  //console.log("arrSubExpr= ", arrSubExpr);
-
-  //определяем какой тип факториала и переводим в численный вид
+  //определяем какой тип факториала введнного подвыражения и вычисляем в циферно-строковый вид
   function calcSubExpr(subExp) {
     let lastSymb = subExp[subExp.length - 1];
     let preLastSymb = subExp[subExp.length - 2];
     if (lastSymb == "!" && lastSymb == preLastSymb) {
-      //console.log("!! IF subExp= ", subExp, " lastSymb= ", lastSymb, " preLastSymb=", preLastSymb, "  fact= ", fact(parseInt(subExp, "!")));
-      return fact(parseInt(subExp), "!!"); // parseInt автоматически преобразует число игнорируя знаки !
+      return fact(parseInt(subExp), "!!"); // parseInt автоматически преобразует число игнорируя воскл знаки
     }
     if (lastSymb == "!" && lastSymb !== preLastSymb) {
-      //console.log("!! IF subExp= ", subExp, " lastSymb= ", lastSymb, " preLastSymb=", preLastSymb, "  fact= ", fact(parseInt(subExp, "!")));
       return fact(parseInt(subExp), "!");
     }
-
   }
 
+  // перемножаем все подмножества
   let result = "1";
   for (let i = 0; i < arrSubExpr.length; i++) {
     let elementSubExpr = arrSubExpr[i];
-    //console.log("result= ")
     result = multiply(result, calcSubExpr(elementSubExpr));
   }
-
+  
+  //счетчик последних нулей в строке
   function lastsZeroCounter(string) {
     let counter = 0;
     for (let i = string.length - 1; i >= 0; i--) {
@@ -139,6 +133,6 @@ module.exports = function zeros(expression) {
         return counter;
     }
   }
-  
+
   return lastsZeroCounter(result);
 }
